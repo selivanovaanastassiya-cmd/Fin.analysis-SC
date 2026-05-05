@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Финансовый анализ | 2022–2025 | Презентация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #F1F4F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        /* основной контейнер презентации */
+        .presentation-container {
+            max-width: 1280px;
+            width: 100%;
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* обертка слайдера */
+        .slides-wrapper {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            will-change: transform;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            padding: 32px 40px;
+            background: white;
+            min-height: 560px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* стили текста */
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0A2540 0%, #1F4A6E 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #0A2540;
+            border-left: 6px solid #1E6FDF;
+            padding-left: 18px;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1F2A44;
+            margin-bottom: 12px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 24px 0 20px;
+        }
+
+        .kpi-card {
+            background: #F8FAFE;
+            border-radius: 24px;
+            padding: 16px 12px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border: 1px solid #E9EDF2;
+            transition: all 0.2s;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #5A6E8A;
+        }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0A2540;
+            line-height: 1.2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #EFF3F8;
+            border-radius: 40px;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .risk-tag {
+            background: #FEF3F2;
+            color: #B91C1C;
+            border-left: 3px solid #E53E3E;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin: 8px 0;
+        }
+
+        .positive-tag {
+            background: #F0FDF4;
+            color: #166534;
+            border-left: 3px solid #38A169;
+            padding: 12px 16px;
+            border-radius: 16px;
+        }
+
+        .insight {
+            background: #F0F4F9;
+            padding: 18px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #1E2F4F;
+        }
+
+        canvas {
+            width: 100%;
+            height: auto;
+            max-height: 260px;
+            background: #FFFFFF;
+            border-radius: 20px;
+            margin: 16px 0 8px;
+        }
+
+        /* навигация */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px 24px 32px;
+            background: white;
+            border-top: 1px solid #EFF2F8;
+        }
+
+        .nav-btn {
+            background: #0A2540;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn:hover {
+            background: #1F4A6E;
+            transform: scale(0.97);
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #F1F4F9;
+            padding: 6px 18px;
+            border-radius: 40px;
+            color: #1F2A44;
+        }
+
+        /* сетка для двух колонок */
+        .two-columns {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        hr {
+            margin: 16px 0;
+            border: none;
+            height: 1px;
+            background: #E9EDF2;
+        }
+
+        .text-accent-red {
+            color: #DC2626;
+            font-weight: 700;
+        }
+        .text-accent-green {
+            color: #059669;
+            font-weight: 700;
+        }
+
+        @media (max-width: 760px) {
+            .slide { padding: 24px 20px; }
+            h2 { font-size: 1.4rem; }
+            .kpi-value { font-size: 1.3rem; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="presentation-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+        <!-- SLIDE 1 - Титул -->
+        <div class="slide">
+            <div style="flex:1; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                <span class="badge" style="margin-bottom: 24px; align-self: center;">Глубокий анализ</span>
+                <h1 style="font-size: 3.2rem; margin-bottom: 16px;">Финансовый анализ компании</h1>
+                <p style="font-size: 2rem; font-weight: 600; color: #1E6FDF;">2022 — 2025</p>
+                <div style="margin-top: 48px;">
+                    <p style="color: #5A6E8A;">Выручка ↑ 189% | Маржа ↓ 18 п.п. | Денежный поток под давлением</p>
+                </div>
+                <div style="margin-top: 64px;">
+                    <p style="font-size: 0.85rem; color: #8A99B0;">Финансовая диагностика | Управленческие приоритеты</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2 - Executive Summary + KPI карточки -->
+        <div class="slide">
+            <h2>Executive Summary</h2>
+            <p style="font-size: 1.05rem; margin-bottom: 16px;">Компания прошла фазу агрессивного роста и вошла в фазу <strong class="text-accent-red">снижения эффективности</strong>: выручка растёт, но маржинальность, EBIT, чистая маржа и денежная позиция ухудшаются. Главные драйверы давления — падение маржи, взрывной рост запасов и дебиторской задолженности, слабая конверсия прибыли в деньги.</p>
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="kpi-label">Выручка 2025</div><div class="kpi-value">2 455,6 млн ₽</div></div>
+                <div class="kpi-card"><div class="kpi-label">Валовая рентабельность</div><div class="kpi-value">36.8%</div></div>
+                <div class="kpi-card"><div class="kpi-label">EBIT-маржа</div><div class="kpi-value">20.6%</div></div>
+                <div class="kpi-card"><div class="kpi-label">Чистая маржа</div><div class="kpi-value">16.6%</div></div>
+                <div class="kpi-card"><div class="kpi-label">Запасы / выручка</div><div class="kpi-value">34.8%</div></div>
+                <div class="kpi-card"><div class="kpi-label">Дебиторка / выручка</div><div class="kpi-value">25.2%</div></div>
+                <div class="kpi-card"><div class="kpi-label">Деньги / выручка</div><div class="kpi-value">4.3%</div></div>
+            </div>
+            <div class="insight"><strong>Ключевой вывод:</strong> бизнес масштабируется, но ценовая сила падает, оборотный капитал разрушает ликвидность. Требуется срочная ребалансировка.</div>
+        </div>
+
+        <!-- SLIDE 3 - Динамика выручки -->
+        <div class="slide">
+            <h2>📈 Динамика выручки</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p><strong>2022:</strong> 848,6 млн ₽<br><strong>2023:</strong> 1 420,2 млн ₽ (+67%)<br><strong>2024:</strong> 2 220,4 млн ₽ (+56%)<br><strong>2025:</strong> 2 455,6 млн ₽ (+11%)</p>
+                    <div class="risk-tag" style="margin-top: 20px;">⚠️ Резкое замедление роста в 2025 сигнализирует о выходе из гиперроста.</div>
+                </div>
+                <div class="col">
+                    <canvas id="revenueChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">✅ Ключевой вывод: рост выручки сохраняется, но темпы роста упали с 67% до 11% — необходима диверсификация каналов.</div>
+        </div>
+
+        <!-- SLIDE 4 - Маржа и валовая прибыль -->
+        <div class="slide">
+            <h2>📉 Маржинальность: системное падение</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p><strong>Валовая рентабельность:</strong><br>2022: 54.8% → 2025: 36.8%</p>
+                    <p><strong>Падение на 18 п.п.</strong> за период. Себестоимость растёт быстрее цен, компания теряет ценовую силу. </p>
+                    <div class="positive-tag">Маржинальная прибыль всё ещё высокая (904 млн ₽ в 2025), но тренд угрожает EBIT.</div>
+                </div>
+                <div class="col">
+                    <canvas id="marginChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">🔴 Ключевой вывод: каждый год маржа снижается без восстановления – критический сигнал для P&L.</div>
+        </div>
+
+        <!-- SLIDE 5 - Прямые расходы (низкие, но нестабильные) -->
+        <div class="slide">
+            <h2>📦 Прямые расходы (логистика, сертификация, стикеровка)</h2>
+            <p>Доля статей в выручке остаётся низкой (0.25%–0.7%), но динамика волатильна. Суммарно ~1.5% выручки – давление на маржу минимальное.</p>
+            <canvas id="directCostChart" width="600" height="240" style="width:100%; height:auto; max-height:240px"></canvas>
+            <div class="insight">⚙️ Ключевой вывод: прямые расходы не объясняют сжатие маржи – корень в себестоимости товаров и ценообразовании.</div>
+        </div>
+
+        <!-- SLIDE 6 - OPEX и EBIT -->
+        <div class="slide">
+            <h2>📊 Операционные расходы & EBIT</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p><strong>EBIT-маржа:</strong><br>2022: 36.3% → 2025: 20.6%<br>Абсолютный EBIT: 308 → 505 млн ₽, но в 2025 падение относительно 2024.</p>
+                    <p><strong>OPEX / выручка:</strong> 15.8% (2022) → 13.6% (2025), после улучшения до 11.9% в 2023 – рост затрат с 2024.</p>
+                    <div class="risk-tag">⚠️ Масштаб перестал работать: зарплаты, хранение, списания раздувают структуру.</div>
+                </div>
+                <div class="col">
+                    <canvas id="ebitChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">🔥 Ключевой вывод: EBIT-маржа снизилась на 15.7 п.п., а OPEX растёт быстрее выручки – потеря операционной эффективности.</div>
+        </div>
+
+        <!-- SLIDE 7 - Чистая прибыль + влияние валюты / налогов -->
+        <div class="slide">
+            <h2>💰 Чистая прибыль: абсолютный рост vs качество</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p>Чистая прибыль: 217,6 млн ₽ (25.6%) → 408,4 млн ₽ (16.6%)</p>
+                    <p><strong>Внереализационный убыток 2025: -41,4 млн ₽</strong> (в основном отклонения курса валюты).<br>Эффективная ставка налога упала до ~12% – требует проверки.</p>
+                    <div class="positive-tag">Чистая прибыль абсолютно растёт, но маржа сжалась на 9 п.п.</div>
+                </div>
+                <div class="col">
+                    <canvas id="netMarginChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">💱 Ключевой вывод: валютные колебания и списания усиливают волатильность – чистая прибыль становится ненадёжным индикатором качества.</div>
+        </div>
+
+        <!-- SLIDE 8 - Запасы -->
+        <div class="slide">
+            <h2>📦 Запасы: перегрузка оборотного капитала</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p>Запасы: 251 млн ₽ → 854,5 млн ₽ (рост 3.4x)<br>Доля запасов / выручка: 29.6% → 34.8% (провал в 2025).</p>
+                    <div class="risk-tag">📌 Закупки опережают спрос – риск неликвидов и кассовых разрывов.</div>
+                </div>
+                <div class="col">
+                    <canvas id="inventoryChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">⚠️ Ключевой вывод: запасы “запирают” ликвидность, списания уже растут – необходимо жёсткое управление оборачиваемостью.</div>
+        </div>
+
+        <!-- SLIDE 9 - Дебиторская задолженность -->
+        <div class="slide">
+            <h2>🧾 Дебиторская задолженность: деньги в клиентах</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p>ДЗ: 115,9 млн → 617,8 млн (рост 5.3x)<br>Доля в выручке: 13.7% → 25.2% – взрывной рост.</p>
+                    <div class="risk-tag">🏦 Деньги не возвращаются, усиливается зависимость от платёжной дисциплины.</div>
+                </div>
+                <div class="col">
+                    <canvas id="receivablesChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">📉 Ключевой вывод: второй по значимости фактор давления на cash flow. Требуется ревизия отсрочек и DSO.</div>
+        </div>
+
+        <!-- SLIDE 10 - Денежные средства -->
+        <div class="slide">
+            <h2>💸 Денежные средства: разрыв «прибыль vs деньги»</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <p>Денежные средства: 184,1 млн → 105,9 млн<br>Доля к выручке: 21.7% → 4.3% – обвал.</p>
+                    <div class="positive-tag">Бизнес прибыльный, но не генерирует свободный денежный поток.</div>
+                </div>
+                <div class="col">
+                    <canvas id="cashChart" width="500" height="220" style="width:100%; height:auto; max-height:220px"></canvas>
+                </div>
+            </div>
+            <div class="insight">💧 Ключевой вывод: компания финансирует рост за счёт собственного оборотного капитала без привлечения долга, но деньги “застыли” – ликвидность под угрозой.</div>
+        </div>
+
+        <!-- SLIDE 11 - Риски и позитивные факторы -->
+        <div class="slide">
+            <h2>⚖️ Риски vs Позитив</h2>
+            <div class="two-columns">
+                <div class="col">
+                    <h3 style="color:#B91C1C;">🔴 Ключевые риски</h3>
+                    <div class="risk-tag">Потеря маржи в основном канале</div>
+                    <div class="risk-tag">Кассовые разрывы из-за запасов и дебиторки</div>
+                    <div class="risk-tag">Рост неликвидных остатков на складе</div>
+                    <div class="risk-tag">Валютные колебания (FX-расходы -34,7 млн в 2025)</div>
+                </div>
+                <div class="col">
+                    <h3 style="color:#059669;">✅ Позитивные факторы</h3>
+                    <div class="positive-tag">Сильный рост выручки (x2.9 за период)</div>
+                    <div class="positive-tag">Сохранение положительной чистой прибыли</div>
+                    <div class="positive-tag">Высокий уровень валовой маржи >36%</div>
+                    <div class="positive-tag">Отсутствие долговой нагрузки с 2024 года</div>
+                </div>
+            </div>
+            <div class="insight">🎯 Компания финансово независима, но операционные проблемы могут перекрыть преимущества без быстрых действий.</div>
+        </div>
+
+        <!-- SLIDE 12 - Итоговый диагноз + 3 приоритета -->
+        <div class="slide">
+            <h2>🏁 Итоговый диагноз и управленческие приоритеты</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 24px;"><strong>Диагноз:</strong> Компания прошла фазу активного роста и вошла в фазу снижения эффективности. Бизнес растёт по выручке, но НЕ растёт по прибыльности и денежному потоку. Маржинальность сжимается, оборотный капитал разрушает стоимость.</p>
+            <div style="background: #0A2540; border-radius: 28px; padding: 24px; color: white; margin: 20px 0;">
+                <p style="font-size: 1.4rem; font-weight: 700; margin-bottom: 16px;">🎯 3 управленческих приоритета</p>
+                <ol style="margin-left: 24px; font-weight: 500; display: flex; flex-direction: column; gap: 12px;">
+                    <li>✅ <strong>Восстановить маржинальность</strong> – пересмотреть ценообразование, провести анализ категорий и себестоимости брендов.</li>
+                    <li>📦 <strong>Усилить контроль запасов и дебиторской задолженности</strong> – внедрить лимиты оборачиваемости, ужесточить условия отсрочек.</li>
+                    <li>💵 <strong>Повысить конвертацию прибыли в денежный поток</strong> – сократить цикл конверсии, улучшить прогнозирование закупок.</li>
+                </ol>
+            </div>
+            <div class="insight">Без ребалансинга оборотного капитала и восстановления маржи, дальнейший рост ухудшит рентабельность капитала.</div>
+        </div>
+    </div>
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevSlide">← Назад</button>
+        <div class="slide-counter" id="slideCounter">1 / 12</div>
+        <button class="nav-btn" id="nextSlide">Далее →</button>
+    </div>
+</div>
+
+<script>
+    // ------ SLIDER LOGIC ------
+    const slidesWrapper = document.getElementById('slidesWrapper');
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    const counterSpan = document.getElementById('slideCounter');
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function updateSlider() {
+        const shift = -currentIndex * 100;
+        slidesWrapper.style.transform = `translateX(${shift}%)`;
+        counterSpan.innerText = `${currentIndex+1} / ${totalSlides}`;
+    }
+
+    function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+            currentIndex++;
+            updateSlider();
+        }
+    }
+
+    function prevSlide() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlider();
+        }
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+
+    // --- GRAPHICS SECTION: все canvas графики (чистый JS, без библиотек) ---
+    function drawBarChart(canvasId, labels, dataPoints, yLabel, color = '#1E6FDF', asMillions = true) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const container = canvas.parentElement;
+        const width = container.clientWidth - 20;
+        const height = 220;
+        canvas.width = width;
+        canvas.height = height;
+        ctx.clearRect(0, 0, width, height);
+        
+        if (!dataPoints.length) return;
+        const maxVal = Math.max(...dataPoints, 1);
+        const margin = { top: 20, right: 10, bottom: 30, left: 45 };
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+        const barWidth = chartWidth / dataPoints.length * 0.7;
+        const xStep = chartWidth / dataPoints.length;
+        
+        // оси
+        ctx.beginPath();
+        ctx.strokeStyle = "#CBD5E1";
+        ctx.lineWidth = 1;
+        ctx.moveTo(margin.left, margin.top);
+        ctx.lineTo(margin.left, height - margin.bottom);
+        ctx.lineTo(width - margin.right, height - margin.bottom);
+        ctx.stroke();
+        
+        for (let i = 0; i < dataPoints.length; i++) {
+            let value = dataPoints[i];
+            let displayVal = asMillions ? (value / 1000).toFixed(1) + " млн" : value.toFixed(1) + "%";
+            const barHeight = (value / maxVal) * chartHeight;
+            const x = margin.left + i * xStep + (xStep - barWidth)/2;
+            const y = height - margin.bottom - barHeight;
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, barWidth, barHeight);
+            ctx.fillStyle = "#1E293B";
+            ctx.font = "11px 'Inter'";
+            ctx.fillText(labels[i], x + barWidth/4, height - margin.bottom + 18);
+            ctx.fillStyle = "#334155";
+            ctx.fillText(displayVal, x + barWidth/4, y - 4);
+        }
+        ctx.fillStyle = "#0F172A";
+        ctx.font = "bold 10px Inter";
+        ctx.fillText(yLabel, margin.left - 10, margin.top + 10);
+    }
+
+    function drawLineChart(canvasId, labels, percentages, color = '#E53E3E') {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const container = canvas.parentElement;
+        const width = container.clientWidth - 20;
+        const height = 220;
+        canvas.width = width;
+        canvas.height = height;
+        ctx.clearRect(0, 0, width, height);
+        const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+        const maxY = 60;
+        const minY = 0;
+        
+        // оси
+        ctx.beginPath();
+        ctx.strokeStyle = "#CBD5E1";
+        ctx.moveTo(margin.left, margin.top);
+        ctx.lineTo(margin.left, height - margin.bottom);
+        ctx.lineTo(width - margin.right, height - margin.bottom);
+        ctx.stroke();
+        
+        const xStep = chartWidth / (percentages.length - 1);
+        const points = [];
+        for (let i = 0; i < percentages.length; i++) {
+            let x = margin.left + i * xStep;
+            let y = height - margin.bottom - (percentages[i] / maxY) * chartHeight;
+            points.push({x, y});
+            ctx.fillStyle = "#1E293B";
+            ctx.font = "10px Inter";
+            ctx.fillText(labels[i], x-8, height - margin.bottom + 18);
+            ctx.fillStyle = "#DC2626";
+            ctx.fillText(percentages[i].toFixed(1)+"%", x-8, y-6);
+        }
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i=1; i<points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+        ctx.stroke();
+        points.forEach(p => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, 2*Math.PI); ctx.fill(); ctx.fillStyle = "white"; ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, 2*Math.PI); ctx.fill(); });
+        ctx.fillStyle = "#0F172A";
+        ctx.font = "bold 10px Inter";
+        ctx.fillText("%", margin.left-5, margin.top+10);
+    }
+
+    // подготовка данных и вызов
+    const years = ['2022', '2023', '2024', '2025'];
+    // выручка (млн)
+    const revenueValues = [848572, 1420212, 2220369, 2455603];
+    drawBarChart('revenueChart', years, revenueValues, 'Выручка, млн ₽', '#1E6FDF', true);
+    
+    // маржа валовая %
+    const marginVals = [54.8, 45.6, 39.0, 36.8];
+    drawLineChart('marginChart', years, marginVals, '#DC2626');
+    
+    // EBIT-маржа
+    const ebitMargin = [36.3, 30.7, 24.1, 20.6];
+    drawLineChart('ebitChart', years, ebitMargin, '#D97706');
+    
+    // Чистая маржа
+    const netMargin = [25.6, 23.4, 17.8, 16.6];
+    drawLineChart('netMarginChart', years, netMargin, '#059669');
+    
+    // Запасы абсолютные (млн)
+    const inventories = [251301, 434020, 620672, 854507];
+    drawBarChart('inventoryChart', years, inventories, 'Запасы, млн ₽', '#3B82F6', true);
+    
+    // Дебиторка
+    const receivables = [115945, 221705, 463817, 617771];
+    drawBarChart('receivablesChart', years, receivables, 'ДЗ, млн ₽', '#F97316', true);
+    
+    // Денежные средства
+    const cashVals = [184096, 115451, 102968, 105921];
+    drawBarChart('cashChart', years, cashVals, 'Деньги, млн ₽', '#14B8A6', true);
+    
+    // Прямые расходы: групповой график (логистика, серт, стикеровка)
+    function drawDirectCosts() {
+        const canvas = document.getElementById('directCostChart');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const container = canvas.parentElement;
+        let width = container.clientWidth - 20;
+        let height = 240;
+        canvas.width = width;
+        canvas.height = height;
+        ctx.clearRect(0, 0, width, height);
+        const logistics = [0.41, 0.42, 0.25, 0.49];
+        const certification = [0.69, 0.35, 0.33, 0.29];
+        const stickers = [0.46, 0.46, 0.31, 0.28];
+        const labels = ['2022','2023','2024','2025'];
+        const margin = { top: 25, right: 20, bottom: 40, left: 45 };
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+        const barWidth = chartWidth / (labels.length * 3) * 0.7;
+        const groupOffset = barWidth * 2.5;
+        const colors = ['#2563EB', '#7C3AED', '#DB2777'];
+        for (let i=0; i<labels.length; i++) {
+            let xBase = margin.left + i* (chartWidth/labels.length) + (chartWidth/labels.length)/2 - groupOffset/1.5;
+            const vals = [logistics[i], certification[i], stickers[i]];
+            for (let j=0; j<vals.length; j++) {
+                let barHeight = (vals[j] / 1.0) * chartHeight;
+                let x = xBase + j * (barWidth+4);
+                let y = height - margin.bottom - barHeight;
+                ctx.fillStyle = colors[j];
+                ctx.fillRect(x, y, barWidth-2, barHeight);
+                ctx.fillStyle = "#1F2A44";
+                ctx.font = "9px Inter";
+                if(i===0) ctx.fillText(j===0?"Логистика":j===1?"Сертиф":"Стикер", x, margin.top+10);
+            }
+            ctx.fillStyle = "#334155";
+            ctx.fillText(labels[i], xBase + barWidth, height - margin.bottom + 18);
+        }
+        ctx.fillStyle = "#0F172A";
+        ctx.fillText("Прямые расходы (% выручки)", margin.left-5, margin.top-2);
+    }
+    drawDirectCosts();
+    
+    // обработка ресайза для перерисовки
+    window.addEventListener('resize', () => {
+        drawBarChart('revenueChart', years, revenueValues, 'Выручка, млн ₽', '#1E6FDF', true);
+        drawLineChart('marginChart', years, marginVals, '#DC2626');
+        drawLineChart('ebitChart', years, ebitMargin, '#D97706');
+        drawLineChart('netMarginChart', years, netMargin, '#059669');
+        drawBarChart('inventoryChart', years, inventories, 'Запасы, млн ₽', '#3B82F6', true);
+        drawBarChart('receivablesChart', years, receivables, 'ДЗ, млн ₽', '#F97316', true);
+        drawBarChart('cashChart', years, cashVals, 'Деньги, млн ₽', '#14B8A6', true);
+        drawDirectCosts();
+    });
+</script>
+</body>
+</html>
